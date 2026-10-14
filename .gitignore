@@ -1,0 +1,34 @@
+﻿# FarsiSyntax Lab - Git exclusions
+# Research datasets and checkpoints
+/data/
+/models/
+/checkpoints/
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.zip
+*.pkl
+# API secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+# JavaScript and Vercel
+node_modules/
+.vercel/
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Local source backups
+*.bak

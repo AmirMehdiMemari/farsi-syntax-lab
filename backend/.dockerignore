@@ -1,0 +1,41 @@
+﻿# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local environments
+.venv/
+venv/
+env/
+conda-meta/
+
+# Secrets and environment files
+.env
+.env.*
+*.pem
+*.key
+
+# Git and editor metadata
+.git/
+.github/
+.vscode/
+.idea/
+
+# Research artifacts
+data/
+models/
+notebooks/
+reports/
+checkpoints/
+
+# Large model files stay on the model host
+*.pt
+*.pth
+*.safetensors
+pytorch_model.bin
+
+# Miscellaneous
+*.log
+.DS_Store
+Thumbs.db

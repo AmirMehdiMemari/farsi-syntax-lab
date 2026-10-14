@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#071a2d">
+
+    <title>FarsiSyntax Lab | تحلیل هوشمند زبان فارسی</title>
+
+    <meta name="description"
+          content="آزمایشگاه هوشمند تحلیل زبان فارسی با استفاده از ParsBERT؛ شناسایی نقش دستوری واژگان و پژوهش در پردازش زبان فارسی.">
+
+    <meta name="author" content="Amir Mehdi Memari">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/animations.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/i18n.js" defer></script>
+</head>
+
+<body>
+
+    <!-- Background decorations -->
+    <div class="ambient-background" aria-hidden="true"></div>
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <!-- ============================= -->
+    <!-- NAVIGATION -->
+    <!-- ============================= -->
+
+    <header class="site-header" id="top">
+
+        <nav class="navbar container" aria-label="منوی اصلی">
+
+            <a href="#home" class="brand" aria-label="صفحه اصلی FarsiSyntax Lab">
+                <span class="brand-symbol" aria-hidden="true">✦</span>
+
+                <span class="brand-text">
+                    <strong dir="ltr">FarsiSyntax <span>Lab</span></strong>
+                    <small>Persian Linguistics & Artificial Intelligence</small>
+                </span>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menu-toggle"
+                type="button"
+                aria-label="باز کردن فهرست"
+                aria-controls="nav-links"
+                aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-links" id="nav-links">
+
+                <a href="#home" class="nav-link active">خانه</a>
+                <a href="#analyzer" class="nav-link">تحلیل متن</a>
+                <a href="#research" class="nav-link">نتایج پژوهش</a>
+                <a href="#features" class="nav-link">امکانات</a>
+                <a href="#about" class="nav-link">درباره پروژه</a>
+
+            </div>
+
+            <a
+                href="https://github.com/AmirMehdiMemari"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="nav-github">
+                GitHub ↗
+            </a>
+
+                    <div class="language-switch"
+                 id="language-switch"
+                 role="group"
+                 aria-label="Language / زبان">
+                <button type="button"
+                        data-set-lang="fa"
+                        aria-pressed="true">FA</button>
+                <button type="button"
+                        data-set-lang="en"
+                        aria-pressed="false">EN</button>
+            </div>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <!-- ============================= -->
+        <!-- HERO SECTION -->
+        <!-- ============================= -->
+
+        <section class="hero" id="home">
+
+            <div class="hero-pattern" aria-hidden="true"></div>
+
+            <div class="container hero-content">
+
+                <div class="hero-copy" data-reveal>
+
+                    <span class="eyebrow">
+                        ✦ آزمایشگاه پردازش زبان فارسی
+                    </span>
+
+                    <h1>
+                        میراث زبان فارسی،
+                        <span class="gold-text">قدرت هوش مصنوعی</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        کشف ساختار زبان فارسی با استفاده از یادگیری عمیق،
+                        پردازش زبان طبیعی و مدل پیشرفته ParsBERT.
+                        هر واژه، دریچه‌ای به ساختار و زیبایی زبان ماست.
+                    </p>
+
+                    <div class="hero-actions">
+
+                        <a href="#analyzer" class="btn btn-primary">
+                            ✦ شروع تحلیل متن
+                        </a>
+
+                        <a href="#research" class="btn btn-outline">
+                            مشاهده پژوهش
+                        </a>
+
+                    </div>
+
+                    <div class="hero-model-note">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        Fine-tuned ParsBERT · 16 POS Categories
+                    </div>
+
+                </div>
+
+                <div class="hero-art" data-reveal>
+
+                    <div class="ferdowsi-halo" aria-hidden="true"></div>
+
+                    <img
+                        class="ferdowsi-image"
+                        src="assets/images/ferdowsi-hero.webp"
+                        alt="تصویر هنری حکیم ابوالقاسم فردوسی"
+                        fetchpriority="high">
+
+                    <div class="poetry-card">
+                        <span class="poetry-mark">❝</span>
+
+                        <blockquote>
+                            به نام خداوند جان و خرد
+                            <span>کزین برتر اندیشه برنگذرد</span>
+                        </blockquote>
+
+                        <span class="poetry-author">
+                            حکیم ابوالقاسم فردوسی
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="hero-bottom-line" aria-hidden="true"></div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- ANALYZER SECTION -->
+        <!-- ============================= -->
+
+        <section class="analyzer-section section-padding" id="analyzer">
+
+            <div class="container">
+
+                <div class="section-heading" data-reveal>
+
+                    <span class="section-kicker">PERSIAN NLP ANALYZER</span>
+
+                    <h2>تحلیل هوشمند <span>متن فارسی</span></h2>
+
+                    <p>
+                        جمله فارسی خود را وارد کنید تا نقش دستوری واژگان
+                        با مدل آموزش‌دیده ParsBERT شناسایی شود.
+                    </p>
+
+                </div>
+
+                <div class="analyzer-card" data-reveal>
+
+                    <div class="analyzer-topbar">
+
+                        <div class="analyzer-title">
+                            <span class="analyzer-icon" aria-hidden="true">✧</span>
+
+                            <div>
+                                <h3>آزمایشگاه تحلیل متن</h3>
+                                <p>Part-of-Speech Tagging</p>
+                            </div>
+                        </div>
+
+                        <span class="model-indicator" id="model-indicator">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            وضعیت سرویس: در انتظار اتصال
+                        </span>
+
+                    </div>
+
+                    <form id="analysis-form">
+
+                        <label for="persian-input" class="input-label">
+                            متن فارسی
+                        </label>
+
+                        <div class="textarea-wrapper">
+
+                            <textarea
+                                id="persian-input"
+                                name="text"
+                                dir="rtl"
+                                lang="fa"
+                                maxlength="1000"
+                                rows="5"
+                                placeholder="برای تحلیل، یک جمله فارسی بنویسید..."
+                                required></textarea>
+
+                            <div class="input-footer">
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="clear-button">
+                                    پاک کردن متن
+                                </button>
+
+                                <span id="character-count">
+                                    0 / 1000
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="example-area">
+
+                            <span class="example-label">نمونه‌های پیشنهادی:</span>
+
+                            <div class="example-buttons">
+
+                                <button
+                                    type="button"
+                                    class="example-chip"
+                                    data-example="من امروز درباره زبان فارسی تحقیق می‌کنم.">
+                                    متن رسمی
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="example-chip"
+                                    data-example="من امروز می‌خوام برم خونه و استراحت کنم.">
+                                    متن محاوره‌ای
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="example-chip"
+                                    data-example="توانا بود هر که دانا بود.">
+                                    شعر فارسی
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="analyzer-actions">
+
+                            <button
+                                class="btn btn-primary analyze-button"
+                                type="submit"
+                                id="analyze-button">
+                                <span aria-hidden="true">✦</span>
+                                تحلیل دستوری متن
+                            </button>
+
+                            <span class="analyzer-help">
+                                مدل: ParsBERT · برچسب‌گذاری نقش دستوری
+                            </span>
+
+                        </div>
+
+                    </form>
+
+                    <div
+                        class="form-status"
+                        id="form-status"
+                        role="status"
+                        aria-live="polite">
+                    </div>
+
+                </div>
+
+                <!-- Real predictions appear here after API response -->
+
+                <section
+                    class="results-card"
+                    id="results-panel"
+                    aria-labelledby="results-heading"
+                    hidden>
+
+                    <div class="results-header">
+
+                        <div>
+                            <span class="section-kicker">MODEL PREDICTIONS</span>
+                            <h3 id="results-heading">نتایج تحلیل دستوری</h3>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline btn-small"
+                            id="download-json">
+                            دریافت JSON
+                        </button>
+
+                    </div>
+
+                    <div class="analysis-summary" id="analysis-summary"></div>
+
+                    <div
+                        class="token-list"
+                        id="token-list"
+                        dir="rtl"
+                        aria-label="برچسب‌های دستوری واژگان">
+                    </div>
+
+                    <p class="results-disclaimer">
+                        امتیازهای نمایش‌داده‌شده خروجی مدل هستند
+                        و لزوماً احتمال‌های کالیبره‌شده نیستند.
+                    </p>
+
+                </section>
+
+                <!-- Template populated only with actual API results -->
+
+                <template id="pos-token-template">
+                    <div class="pos-token">
+                        <span class="token-word"></span>
+                        <span class="token-tag"></span>
+                        <span class="token-confidence"></span>
+                    </div>
+                </template>
+
+            </div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- RESEARCH RESULTS -->
+        <!-- ============================= -->
+
+        <section class="research-section section-padding" id="research">
+
+            <div class="container">
+
+                <div class="section-heading" data-reveal>
+
+                    <span class="section-kicker">OFFICIAL TEST RESULTS</span>
+
+                    <h2>نتایج <span>پژوهش</span></h2>
+
+                    <p>
+                        نتایج ارزیابی روی مجموعه‌داده‌های رسمی و محاوره‌ای
+                        فارسی با استفاده از تقسیم‌بندی‌های آزمون مستقل.
+                    </p>
+
+                </div>
+
+                <div class="stats-grid">
+
+                    <article class="stat-card" data-reveal>
+                        <span class="stat-icon" aria-hidden="true">◈</span>
+                        <strong class="stat-number" data-count="97.27">97.27%</strong>
+                        <h3>دقت فارسی رسمی</h3>
+                        <p>ParsBERT · PerDT Test</p>
+                    </article>
+
+                    <article class="stat-card" data-reveal>
+                        <span class="stat-icon" aria-hidden="true">◉</span>
+                        <strong class="stat-number" data-count="87.36">87.36%</strong>
+                        <h3>دقت فارسی محاوره‌ای</h3>
+                        <p>ParsBERT · iPerUDT Test</p>
+                    </article>
+
+                    <article class="stat-card" data-reveal>
+                        <span class="stat-icon" aria-hidden="true">✦</span>
+                        <strong class="stat-number" data-count="16">16</strong>
+                        <h3>دسته دستوری</h3>
+                        <p>Universal POS Categories</p>
+                    </article>
+
+                    <article class="stat-card" data-reveal>
+                        <span class="stat-icon" aria-hidden="true">⌘</span>
+                        <strong class="stat-number">ParsBERT</strong>
+                        <h3>مدل اصلی</h3>
+                        <p>Transformer-based NLP</p>
+                    </article>
+
+                </div>
+
+                <div class="research-comparison" data-reveal>
+
+                    <div class="comparison-heading">
+                        <h3>مقایسه عملکرد مدل‌ها</h3>
+                        <p>دقت روی داده‌های آزمون مستقل</p>
+                    </div>
+
+                    <div class="comparison-table-wrapper">
+
+                        <table class="comparison-table">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">مدل</th>
+                                    <th scope="col">فارسی رسمی</th>
+                                    <th scope="col">فارسی محاوره‌ای</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <th scope="row">BiLSTM</th>
+                                    <td>95.55%</td>
+                                    <td>78.29%</td>
+                                </tr>
+
+                                <tr class="highlight-row">
+                                    <th scope="row">ParsBERT</th>
+                                    <td>97.27%</td>
+                                    <td>87.36%</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <p class="research-note">
+                        توجه: تفاوت شیوه برچسب‌گذاری دو پیکره،
+                        به‌ویژه در دسته PART، بر تفسیر نتایج تأثیر دارد.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- FEATURES -->
+        <!-- ============================= -->
+
+        <section class="features-section section-padding" id="features">
+
+            <div class="container">
+
+                <div class="section-heading" data-reveal>
+                    <span class="section-kicker">PLATFORM FEATURES</span>
+                    <h2>امکانات <span>آزمایشگاه</span></h2>
+                </div>
+
+                <div class="features-grid">
+
+                    <article class="feature-card" data-reveal>
+                        <span class="feature-icon" aria-hidden="true">✧</span>
+                        <h3>تحلیل نقش دستوری</h3>
+                        <p>
+                            شناسایی نقش دستوری هر واژه با استفاده
+                            از مدل عمیق آموزش‌دیده روی زبان فارسی.
+                        </p>
+                    </article>
+
+                    <article class="feature-card" data-reveal>
+                        <span class="feature-icon" aria-hidden="true">◈</span>
+                        <h3>فارسی رسمی و محاوره‌ای</h3>
+                        <p>
+                            بررسی عملکرد مدل روی دو سبک متفاوت
+                            از زبان فارسی و نمایش تفاوت‌های پژوهشی.
+                        </p>
+                    </article>
+
+                    <article class="feature-card" data-reveal>
+                        <span class="feature-icon" aria-hidden="true">⌘</span>
+                        <h3>خروجی ساختاریافته</h3>
+                        <p>
+                            نمایش برچسب‌های دستوری و امکان دریافت
+                            نتایج تحلیل در قالب JSON.
+                        </p>
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- ABOUT -->
+        <!-- ============================= -->
+
+        <section class="about-section section-padding" id="about">
+
+            <div class="container about-grid">
+
+                <div class="about-copy" data-reveal>
+
+                    <span class="section-kicker">ABOUT FARSI SYNTAX LAB</span>
+
+                    <h2>پیوند میراث فارسی با <span>هوش مصنوعی</span></h2>
+
+                    <p>
+                        FarsiSyntax Lab یک پروژه پژوهشی و کاربردی در حوزه
+                        پردازش زبان طبیعی فارسی است. این پروژه مدل
+                        BiLSTM را با ParsBERT در مسئله برچسب‌گذاری
+                        نقش دستوری مقایسه می‌کند.
+                    </p>
+
+                    <p>
+                        هدف پروژه، بررسی میزان تعمیم مدل‌ها از فارسی
+                        رسمی به زبان محاوره‌ای و ارائه ابزار قابل استفاده
+                        برای تحلیل متن فارسی است.
+                    </p>
+
+                    <div class="creator-card">
+                        <span>طراحی و توسعه</span>
+                        <strong>Amir Mehdi Memari</strong>
+                        <small>Creator & Research Developer</small>
+                    </div>
+
+                </div>
+
+                <div class="about-decoration" data-reveal>
+                    <span class="ornament-symbol" aria-hidden="true">✺</span>
+                    <p>زبان فارسی، میراثی زنده</p>
+                    <span>LANGUAGE · RESEARCH · INTELLIGENCE</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ============================= -->
+    <!-- FOOTER -->
+    <!-- ============================= -->
+
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div class="footer-brand">
+                <strong dir="ltr">FarsiSyntax Lab</strong>
+                <p>Persian Language · NLP · Deep Learning</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">خانه</a>
+                <a href="#analyzer">تحلیل متن</a>
+                <a href="#research">پژوهش</a>
+
+                <a
+                    href="https://github.com/AmirMehdiMemari"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    GitHub
+                </a>
+            </div>
+
+            <div class="footer-credit">
+                <span>Created by</span>
+                <strong>Amir Mehdi Memari</strong>
+            </div>
+
+        </div>
+
+        <div class="container footer-bottom">
+            <span>© 2026 FarsiSyntax Lab</span>
+            <span>Inspired by Persian linguistic heritage</span>
+        </div>
+
+    </footer>
+
+</body>
+</html>
