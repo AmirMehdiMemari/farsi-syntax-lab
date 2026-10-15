@@ -1,0 +1,4 @@
+Corpus,Sentences,Mean tokens,P95 tokens,Max tokens,Over 256,Over 512,Alignment failures
+Formal train,26196,23.1,45,212,0,0,0
+Formal dev,1456,23.1,48,248,0,0,0
+Informal dev,598,21.7,45,87,0,0,0

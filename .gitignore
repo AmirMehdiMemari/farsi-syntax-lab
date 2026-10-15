@@ -1,4 +1,4 @@
-﻿# FarsiSyntax Lab - Git exclusions
+# FarsiSyntax Lab - Git exclusions
 # Research datasets and checkpoints
 /data/
 /models/
@@ -23,12 +23,14 @@ __pycache__/
 venv/
 env/
 .ipynb_checkpoints/
-# JavaScript and Vercel
+# Dependency directories
 node_modules/
-.vercel/
 # Miscellaneous
 .DS_Store
 Thumbs.db
 
 # Local source backups
 *.bak
+
+# Keep original executed notebooks local
+/notebooks/*.ipynb

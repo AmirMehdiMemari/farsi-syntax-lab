@@ -1,173 +1,180 @@
 # FarsiSyntax Lab
 
-**Persian Linguistics × Artificial Intelligence**
+**Persian Part-of-Speech Tagging with Deep Learning**
 
-A research-driven Persian NLP platform for
-Part-of-Speech (POS) tagging using deep learning.
+**Research and implementation:** Amir Mehdi Memari
 
-**Creator:** Amir Mehdi Memari
+FarsiSyntax Lab is an experimental natural language processing
+project investigating how neural POS taggers trained on formal
+Persian generalize to informal Persian.
 
-## Project Overview
+The project compares a BiLSTM baseline with a fine-tuned
+ParsBERT token-classification model. It includes evaluation
+artifacts, research notebooks maintained locally, and
+an optional FastAPI inference backend.
 
-FarsiSyntax Lab investigates how neural language
-models generalize from formal Persian to informal
-and conversational Persian.
+## Research Question
 
-The research compares:
-
-- A BiLSTM POS tagger trained from scratch
-- A fine-tuned ParsBERT token-classification model
-
-Both models were trained using formal Persian data.
-Informal Persian data was reserved for evaluation.
-
-## Official Test Results
-
-| Model | Formal Accuracy | Informal Accuracy |
-|---|---:|---:|
-| BiLSTM | 95.55% | 78.29% |
-| ParsBERT | 97.27% | 87.36% |
-
-### Macro F1
-
-| Model | Formal | Informal |
-|---|---:|---:|
-| BiLSTM | Pending verification | Pending verification |
-| ParsBERT | 0.8982 | 0.7334 |
-
-The formal and informal corpora differ in annotation
-conventions. Therefore, the evaluation measures
-cross-treebank generalization rather than isolating
-a pure language-register effect.
-
-## Datasets
-
-- Universal Dependencies Persian-PerDT
-- iPerUDT: Informal Persian Universal Dependencies
-
-Dataset repositories:
-
-https://github.com/UniversalDependencies/UD_Persian-PerDT
-
-https://github.com/royakabiri/iPerUDT
-
-Dataset files are not included in this repository.
+How well do models trained on formal Persian transfer to
+informal and conversational Persian without additional
+informal-domain fine-tuning?
 
 ## Models
 
-### BiLSTM
+### BiLSTM Baseline
 
-- PyTorch
-- Word embeddings
-- Bidirectional LSTM
-- 16 Universal POS categories
+A recurrent neural sequence-tagging baseline trained on
+formal Persian annotations.
 
-### ParsBERT
+### Fine-Tuned ParsBERT
 
-- Base: HooshvareLab/bert-fa-zwnj-base
-- Task: Token classification
-- Best fine-tuning checkpoint: step 4000
-- Maximum sequence length: 256
-- Label alignment: first subword of each word
+- Base model: HooshvareLab/bert-fa-zwnj-base
+- Task: token classification / Universal POS tagging
+- Output classes: 16 Universal POS categories
+- Selected checkpoint: 4000
+- Model format: safetensors
+- Supports word-level prediction using subword alignment
 
-Trained model weights are distributed separately
-from the Git source code.
+The inference implementation preserves Persian zero-width
+non-joiners in tokenization.
 
-## Web Application
+## Evaluation Results
 
-The frontend uses:
+| Model | PerDT Accuracy | PerDT Macro F1 | iPerUDT Accuracy | iPerUDT Macro F1 |
+|---|---:|---:|---:|---:|
+| BiLSTM | 95.55% | 0.8831 | 78.29% | 0.6544 |
+| ParsBERT | **97.27%** | **0.8982** | **87.36%** | **0.7334** |
 
-- HTML5
-- CSS3
-- Vanilla JavaScript
-- Persian RTL interface
-- Animated Ferdowsi-inspired visual design
+The results refer to the recorded evaluation of the
+respective trained models.
 
-Frontend hosting target: Vercel.
+### Interpretation
 
-## REST API
+ParsBERT outperformed the BiLSTM baseline in these tests
+on both formal and informal Persian.
 
-The inference backend uses FastAPI and PyTorch.
+However, PerDT and iPerUDT differ in their annotation
+conventions. The cross-treebank evaluation therefore
+cannot isolate the effect of language register alone.
 
-Endpoints:
+Model confidence values are softmax scores and should
+not be interpreted as calibrated correctness probabilities.
 
-- GET /health
-- POST /predict
-- GET /docs
+## Datasets
 
-Example request:
+### Persian PerDT
 
-    {
-      "text": "من امروز به دانشگاه می‌روم."
-    }
+Universal Dependencies Persian-PerDT was used for
+formal Persian training and evaluation.
 
-The prediction endpoint requires bearer-token
-authentication.
+https://github.com/UniversalDependencies/UD_Persian-PerDT
 
-API environment variables:
+### iPerUDT
 
-- PARSBERT_MODEL_SOURCE
-- PARSBERT_API_TOKEN
-- HF_TOKEN (only when using a private Hugging Face model)
+Informal Persian Universal Dependencies was used for
+cross-treebank, informal-domain evaluation.
 
-The website's Vercel gateway uses:
+https://github.com/royakabiri/iPerUDT
 
-- PARSBERT_API_URL
-- PARSBERT_API_TOKEN
+Dataset files are not committed to this repository.
+Consult the respective dataset sources for their licenses
+and usage conditions.
 
-Never commit real credentials to Git.
+## Project Components
 
-## Project Structure
+| Path | Purpose |
+|---|---|
+| `backend/inference.py` | Fine-tuned ParsBERT POS inference |
+| `backend/main.py` | Optional authenticated FastAPI backend |
+| `backend/requirements.txt` | Python inference dependencies |
+| `backend/model_bootstrap.py` | Verified private model package loader |
+| `backend/Dockerfile` | Optional backend container configuration |
+| `models/` | Local checkpoints, release archives and diagnostics; Git-ignored |
+| `notebooks/public/` | Clean BiLSTM and ParsBERT research notebooks |
+| `reports/` | Research evaluation and dataset reports |
 
-    app/
-      index.html
-      assets/
-        css/
-        js/
-        images/
-      api/
-      vercel.json
+The two cleaned research notebooks are in `notebooks/public/`.
+Original executed notebooks remain local and are Git-ignored.
+The published notebooks retain experiment code but omit saved outputs.
+Some Colab-specific paths require adjustment before rerunning.
+The `reports/` directory contains recorded research artifacts.
 
-    backend/
-      main.py
-      inference.py
-      requirements.txt
-      Dockerfile
+## Model Availability
 
-    notebooks/
-    reports/
-    src/
+The fine-tuned checkpoint is not stored in ordinary
+Git history because its weights are approximately
+449 MiB.
 
-## Research Limitations
+A verified archive is stored in the private GitHub
+Release tagged `parsbert-pos-v1`.
 
-- POS tagging is not dependency parsing.
-- Input segmentation may differ from gold UD segmentation.
-- Formal and informal datasets use different
-  annotation conventions.
-- Softmax scores are not calibrated probabilities.
-- Cross-domain performance may vary.
-- The deployed model must be independently tested.
+Access to that private release requires repository
+authorization. The model files can also be loaded
+directly from a local `models/parsbert-pos/` directory.
 
-## Deployment Status
+The SHA-256 of the model weights is:
 
-The source code is under development.
+`c4baf420f72f7a5191a334b5ed179a825e7b0d9ee9bcc30c09450ec9329494c0`
 
-The frontend, API gateway, and backend must be
-tested together before public release.
+## Running Local Inference
 
-## Attribution
+The existing development environment uses:
 
-ParsBERT:
+- Python 3.11
+- PyTorch (CPU)
+- Transformers 4.57.6
+- FastAPI
 
-https://huggingface.co/HooshvareLab/bert-fa-zwnj-base
+From the repository root, in Windows PowerShell:
 
-Dataset and model licensing must be reviewed
-before publishing trained weights.
+```powershell
+conda activate farsi-syntax
 
-## Creator
+$env:PARSBERT_MODEL_SOURCE = (
+    Resolve-Path ".\models\parsbert-pos"
+).Path
 
-**Amir Mehdi Memari**
+$env:PARSBERT_API_TOKEN = [guid]::NewGuid().ToString("N")
 
-FarsiSyntax Lab — Persian NLP Research & Development
+python -m uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000
+```
 
-GitHub: https://github.com/AmirMehdiMemari
+Open `http://127.0.0.1:8000/docs` to inspect the
+API documentation. The `/predict` endpoint requires
+the Bearer token configured in the same terminal.
+
+The API accepts Persian text and returns word-level
+POS tags and model scores.
+
+## Verified Implementation Status
+
+- Fine-tuned ParsBERT checkpoint recovered and verified
+- All 16 model labels validated
+- Local inference tested successfully
+- FastAPI health and authentication tests passed
+- Persian UTF-8 request and response integrity verified
+- Private model release download and checksum verified
+
+## Scope and Limitations
+
+This repository focuses on experimental Persian NLP,
+model evaluation, and reproducible inference.
+
+The work is not intended to claim that informal-domain
+performance measures a language-register effect alone.
+Dataset annotation differences and possible domain
+shift should be considered when interpreting results.
+
+The optional FastAPI implementation can be run locally.
+No continuously hosted inference service is required.
+
+## Research Direction
+
+Future work may include error analysis by POS category,
+comparisons of tokenization behavior across registers,
+additional domain-shift experiments, and improved
+evaluation reproducibility.
+
+---
+
+**FarsiSyntax Lab — Persian Language Modeling Research**
